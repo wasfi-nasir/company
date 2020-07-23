@@ -161,7 +161,11 @@ $RECYCLE.BIN/
 *.lnk
 
 **/.idea
-**/company.iml
-**/mvnw.cmd
+.mvn/
+HELP.md
+mvnw
+mvnw.cmd
+company.iml
 .mvn
+
 # End of https://www.gitignore.io/api/git,java,maven,eclipse,windows
