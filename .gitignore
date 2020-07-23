@@ -162,10 +162,9 @@ $RECYCLE.BIN/
 
 **/.idea
 **/.mvn/wrapper
-HELP.md
-mvnw
-mvnw.cmd
-company.iml
-.mvn
+**/HELP.md
+**/mvnw
+**/mvnw.cmd
+**/company.iml
 
 # End of https://www.gitignore.io/api/git,java,maven,eclipse,windows
