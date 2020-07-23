@@ -161,7 +161,7 @@ $RECYCLE.BIN/
 *.lnk
 
 **/.idea
-**/.mvn
+**/.mvn/wrapper
 HELP.md
 mvnw
 mvnw.cmd
