@@ -1,11 +1,17 @@
 package com.exalt.company.model;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+@Document("address")
 public class Address {
+
+    @Id
+    private String id;
 
     private String country;
 
@@ -18,6 +24,7 @@ public class Address {
 
     @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
     private GeoJsonPoint position;
+
 
     public String getCountry() {
         return country;

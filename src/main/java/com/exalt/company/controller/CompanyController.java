@@ -8,14 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/company")
+@RequestMapping("/api/v1/company")
 public class CompanyController {
 
     @Autowired
     private CompanyService companyService;
 
     /**
-     *
      * @param id
      * @return
      */
@@ -25,7 +24,6 @@ public class CompanyController {
     }
 
     /**
-     *
      * @param company
      * @return
      */
@@ -35,7 +33,6 @@ public class CompanyController {
     }
 
     /**
-     *
      * @param id
      * @param company
      * @return
@@ -46,7 +43,6 @@ public class CompanyController {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -56,7 +52,6 @@ public class CompanyController {
     }
 
     /**
-     *
      * @param longitude
      * @param latitude
      * @param distance
@@ -64,7 +59,12 @@ public class CompanyController {
      */
     @GetMapping("/findByDistance")
     public List<Company> geoSearch(@RequestParam(value = "long") Double longitude,
-                @RequestParam(value = "lat") Double latitude, @RequestParam("dist") int distance){
+                                   @RequestParam(value = "lat") Double latitude, @RequestParam("dist") int distance) {
         return companyService.findByDistance(longitude, latitude, distance);
+    }
+
+    @GetMapping("/tran")
+    public Company save() {
+        return companyService.creation();
     }
 }

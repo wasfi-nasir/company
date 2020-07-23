@@ -1,4 +1,4 @@
-package com.exalt.company.repository;
+package com.exalt.company.repo;
 
 import com.exalt.company.model.Company;
 import org.springframework.data.mongodb.repository.MongoRepository;
