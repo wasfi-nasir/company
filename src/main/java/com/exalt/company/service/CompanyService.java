@@ -16,6 +16,4 @@ public interface CompanyService {
     Company findCompany(String id);
 
     List<Company> findByDistance(Double longitude, Double latitude, int distance);
-
-    Company creation();
 }

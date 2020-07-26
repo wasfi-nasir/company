@@ -27,7 +27,7 @@ public class CompanyController {
      * @param company
      * @return
      */
-    @PostMapping(value = {"/", ""})
+    @PostMapping(value = "")
     public Company createCompany(@RequestBody Company company) {
         return companyService.createCompany(company);
     }
@@ -61,10 +61,5 @@ public class CompanyController {
     public List<Company> geoSearch(@RequestParam(value = "long") Double longitude,
                                    @RequestParam(value = "lat") Double latitude, @RequestParam("dist") int distance) {
         return companyService.findByDistance(longitude, latitude, distance);
-    }
-
-    @GetMapping("/tran")
-    public Company save() {
-        return companyService.creation();
     }
 }

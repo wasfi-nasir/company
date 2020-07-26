@@ -3,6 +3,8 @@ package com.exalt.company.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Document("company")
 public class Company {
 
@@ -12,6 +14,8 @@ public class Company {
     private String name;
 
     private Address address;
+
+    private Date date;
 
     public String getId() {
         return id;
@@ -35,5 +39,13 @@ public class Company {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
