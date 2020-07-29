@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface CompanyService {
 
-    Company createCompany(Company address);
+    Company create(Company company);
 
-    Company updateCompany(String id, Company address);
+    Company update(String id, Company company);
 
-    String deleteCompany(String id);
+    String delete(String id);
 
-    Company findCompany(String id);
+    Company findById(String id);
 
     List<Company> findByDistance(Double longitude, Double latitude, int distance);
 }

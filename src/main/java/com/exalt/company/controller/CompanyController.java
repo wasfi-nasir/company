@@ -14,49 +14,26 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
-    /**
-     * @param id
-     * @return
-     */
     @GetMapping(value = "/{id}")
-    public Company getCompany(@PathVariable String id) {
-        return companyService.findCompany(id);
+    public Company getById(@PathVariable String id) {
+        return companyService.findById(id);
     }
 
-    /**
-     * @param company
-     * @return
-     */
     @PostMapping(value = "")
-    public Company createCompany(@RequestBody Company company) {
-        return companyService.createCompany(company);
+    public Company create(@RequestBody Company company) {
+        return companyService.create(company);
     }
 
-    /**
-     * @param id
-     * @param company
-     * @return
-     */
     @PutMapping(value = "/{id}")
-    public Company updateCompany(@PathVariable String id, @RequestBody Company company) {
-        return companyService.updateCompany(id, company);
+    public Company update(@PathVariable String id, @RequestBody Company company) {
+        return companyService.update(id, company);
     }
 
-    /**
-     * @param id
-     * @return
-     */
     @DeleteMapping("/{id}")
-    public String deleteCompany(@PathVariable String id) {
-        return companyService.deleteCompany(id);
+    public String delete(@PathVariable String id) {
+        return companyService.delete(id);
     }
 
-    /**
-     * @param longitude
-     * @param latitude
-     * @param distance
-     * @return
-     */
     @GetMapping("/findByDistance")
     public List<Company> geoSearch(@RequestParam(value = "long") Double longitude,
                                    @RequestParam(value = "lat") Double latitude, @RequestParam("dist") int distance) {

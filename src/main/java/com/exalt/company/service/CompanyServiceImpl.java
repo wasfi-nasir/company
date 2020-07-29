@@ -20,7 +20,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Transactional
     @Override
-    public Company createCompany(Company company) {
+    public Company create(Company company) {
         if (company.getId() != null) {
             throw new CommonException(ErrorEnums.ID_IS_AUTO_GENERATE);
         } else {
@@ -34,19 +34,20 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Transactional
     @Override
-    public Company updateCompany(String id, Company company) {
-        Company temp = companyRepository.findById(id).get();
+    public Company update(String id, Company company) {
+        Company temp = companyRepository.findById(id).orElseThrow(() -> new CommonException(ErrorEnums.USER_NOT_FOUND));
         temp.setName(company.getName());
         Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
-        company.setDate(now);
+        temp.setDate(now);
+        temp.setAddress(company.getAddress());
         companyRepository.save(temp);
         return temp;
     }
 
     @Transactional
     @Override
-    public String deleteCompany(String id) {
+    public String delete(String id) {
         companyRepository.findById(id).orElseThrow(() -> new CommonException(ErrorEnums.USER_NOT_FOUND));
         companyRepository.deleteById(id);
         return "Address has been deleted.";
@@ -54,7 +55,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Transactional(readOnly = true)
     @Override
-    public Company findCompany(String id) {
+    public Company findById(String id) {
         return companyRepository.findById(id)
                 .orElseThrow(() -> new CommonException(ErrorEnums.USER_NOT_FOUND));
     }

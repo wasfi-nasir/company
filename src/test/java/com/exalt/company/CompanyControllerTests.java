@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
+import javax.annotation.PostConstruct;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Calendar;
@@ -28,16 +30,23 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("dev")
 @EnableAutoConfiguration
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class CompanyTests {
+class CompanyControllerTests {
 
     @Autowired
     private CompanyRepository companyRepository;
 
     @Autowired
+    RestTemplateBuilder restTemplateBuilder;
+
     private TestRestTemplate testRestTemplate;
 
     @LocalServerPort
     private int port;
+
+    @PostConstruct
+    public void initialize() {
+        this.testRestTemplate = new TestRestTemplate(restTemplateBuilder.rootUri("http://localhost:" + port + "/api/v1/company"));
+    }
 
     @BeforeEach
     void createObject() {
@@ -67,19 +76,16 @@ class CompanyTests {
     }
 
     @Test
-    public void testFindById() throws URISyntaxException {
+    public void testFindById() {
         List<Company> companies = companyRepository.findAll();
         String id = companies.get(0).getId();
 
-        final String baseUrl = "http://localhost:" + port + "/api/v1/company/" + id;
-        URI uri = new URI(baseUrl);
-
-        ResponseEntity<Company> result = testRestTemplate.getForEntity(uri, Company.class);
+        ResponseEntity<Company> result = get(id);
         assertEquals("exaltt", result.getBody().getName());
     }
 
     @Test
-    public void testPost() throws URISyntaxException {
+    public void testPost() {
         Company company = new Company();
         company.setName("exalt");
 
@@ -97,7 +103,7 @@ class CompanyTests {
         address.setPosition(point);
 
         company.setAddress(address);
-        ResponseEntity<Company> result = testRestTemplate.postForEntity("http://localhost:" + port + "/api/v1/company/", company, Company.class);
+        ResponseEntity<Company> result = testRestTemplate.postForEntity("/", company, Company.class);
         assertEquals(200, result.getStatusCodeValue());
         assertEquals("exalt", result.getBody().getName());
     }
@@ -105,7 +111,7 @@ class CompanyTests {
     @Test
     public void testPut() throws URISyntaxException {
         Company company = new Company();
-        company.setName("exaltt");
+        company.setName("EEXXAALLTT");
 
         Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
@@ -123,20 +129,17 @@ class CompanyTests {
         company.setAddress(address);
         List<Company> companies = companyRepository.findAll();
         String id = companies.get(0).getId();
-
-        final String baseUrl = "http://localhost:" + port + "/api/v1/company/" + id;
-        URI uri = new URI(baseUrl);
-        testRestTemplate.put(uri, company);
-        ResponseEntity<Company> result = testRestTemplate.getForEntity(uri, Company.class);
+        testRestTemplate.put("/" + id, company);
+        ResponseEntity<Company> result = get(id);
         assertEquals(200, result.getStatusCodeValue());
-        assertEquals("exaltt", result.getBody().getName());
+        assertEquals("EEXXAALLTT", result.getBody().getName());
     }
 
     @Test
     public void testDelete() {
         List<Company> companies = companyRepository.findAll();
         String id = companies.get(0).getId();
-        testRestTemplate.delete("http://localhost:" + port + "/api/v1/company/" + id);
+        testRestTemplate.delete("/" + id);
         assertFalse(companyRepository.existsById(id));
     }
 
@@ -158,10 +161,14 @@ class CompanyTests {
         address.setPosition(point);
         company.setAddress(address);
         companyRepository.save(company);
-        ResponseEntity<List<Company>> companies = testRestTemplate.exchange("http://localhost:" + port + "/api/v1/company/findByDistance?long=34&lat=31&dist=10000000",
+        ResponseEntity<List<Company>> companies = testRestTemplate.exchange("/findByDistance?long=34&lat=31&dist=10000000",
                 HttpMethod.GET, null, new ParameterizedTypeReference<List<Company>>() {
                 });
         assertEquals(200, companies.getStatusCodeValue());
         assertEquals("exal LTD", companies.getBody().get(1).getName());
+    }
+
+    private ResponseEntity<Company> get(String id) {
+        return testRestTemplate.getForEntity("/" + id, Company.class);
     }
 }
